@@ -1,0 +1,13 @@
+a.redirect-btn {
+    text-align: center;
+    display: block;
+    background-color: rgb(164, 94, 194);
+    color: #FFF;
+    text-decoration: none;
+    width: 120px !important;
+    border-radius: 15px;
+}
+
+a.redirect-btn:hover {
+    background-color: rgb(188, 123, 216);
+}

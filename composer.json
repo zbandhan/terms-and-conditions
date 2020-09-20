@@ -1,0 +1,19 @@
+{
+    "name": "bandhan/tnc",
+    "description": "Terms and conditions' agreement plugin",
+    "type": "wordpress-plugin",
+    "license": "GPLv2 or later",
+    "authors": [
+        {
+            "name": "Zulfikar",
+            "email": "zbandhan@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Tnc\\": "includes/"
+        }
+    }
+}
