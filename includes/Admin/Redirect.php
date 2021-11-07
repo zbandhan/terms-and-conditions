@@ -29,14 +29,14 @@ class Redirect {
 
     /**
      * Agree Button
-     * 
+     *
      * @return $content
      */
     public function tnc_agreement_buton( $content ) {
 
         ob_start(); ?>
-        
-        <a href="<?php echo get_the_permalink() . "?redirect=" . get_the_modified_time( 'G' ); ?>" 
+
+        <a href="<?php echo get_the_permalink() . "?redirect=" . get_the_modified_time( 'G' ); ?>"
         class="redirect-btn"><?php esc_html_e( 'Agree', 'tnc' ); ?></a>
 
         <?php
@@ -52,21 +52,21 @@ class Redirect {
 
     /**
      * Redirect to specific page
-     * 
+     *
      * @return string
      */
-    public function redirect_to_tnc() { 
+    public function redirect_to_tnc() {
         // Redirection to terms and conditons
         return get_the_permalink( get_option( 'tnc_page_selection' ) );
     }
 
     /**
      * Redirecting to admin area
-     * 
-     * @return void 
+     *
+     * @return void
      */
     public function redirect_to_admin() {
-        
+
         $days = get_option( 'tnc_redirect_setting' );
 
         if ( $this->redirecting_url == $this->modified_time ) {
@@ -79,7 +79,7 @@ class Redirect {
             // Redirect to admin area
             wp_redirect( admin_url() );
             exit;
-            
+
         } elseif ( $days != get_option( 'tnc_cookie_duration' ) ) {
             update_option( 'tnc_cookie_duration', $days );
             unset( $_COOKIE[ 'redirect' ] );
