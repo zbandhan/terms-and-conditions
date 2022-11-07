@@ -2,85 +2,74 @@
 namespace Tnc\Admin;
 
 class Settings {
-    
-    public function __construct() {
 
-        add_action( 'admin_init', [ $this, 'redirect_setting_option' ] );
+    public function __construct() {
+        add_action( 'admin_init', [ $this, 'agreement_options' ] );
     }
 
-    public function redirect_setting_option() {
-        // register a redirect setting
-        register_setting('general', 'tnc_redirect_setting');
-        register_setting('general', 'tnc_page_selection');
-     
-        // register a redirect section
+    public function agreement_options() {
+        // register a setting
+        register_setting( 'general', 'tnc_duration' );
+        register_setting( 'general', 'tnc_page' );
+
+        // register a section
         add_settings_section(
-            'tnc_settings_section',
-            'Terms and Condition Section', [ $this, 'tnc_settings_section_callback' ],
+            'tnc_section',
+            __( 'Terms and Condition Section', 'tnc' ),
+            [ $this, 'tnc_section_callback' ],
             'general'
         );
-     
-        // register a redirect field
+
+        // Add a number input field
         add_settings_field(
-            'tnc_settings_field',
-            'Add Tnc Days',
-            [ $this, 'tnc_settings_field_callback' ],
+            'tnc_days',
+            __('Days', 'tnc'),
+            [ $this, 'tnc_days_field_callback' ],
             'general',
-            'tnc_settings_section'
+            'tnc_section'
         );
 
-        // Register redirect page field
+        // Add setting for select input filed for pages
         add_settings_field(
-            'tnc_settings_page',
-            'Add a page for Terms and Conditions',
-            [ $this, 'tnc_settings_page_callback' ],
+            'tnc_pages',
+            __( 'Agreement page', 'tnc' ),
+            [ $this, 'tnc_pages_callback' ],
             'general',
-            'tnc_settings_section'
+            'tnc_section'
         );
     }
-     
+
     // section content cb
-    public function tnc_settings_section_callback() {}
-     
+    public function tnc_section_callback() {}
+
     // field content cb
-    public function tnc_settings_field_callback() {
-
-        $days_specification = get_option( 'tnc_redirect_setting' );
-
-        if ( '' === $days_specification ) :
-            update_option( 'tnc_redirect_setting', intval( 30 ) ); 
-            update_option( 'tnc_cookie_duration', intval( 30 ) ); 
-            ?>
-            
-            <input type="number" name="tnc_redirect_setting" value="<?php echo esc_attr( $days_specification ); ?>" placeholder="Enter your desired duration">
-
-        <?php else: ?>
-
-            <input type="number" name="tnc_redirect_setting" value="<?php echo esc_attr( $days_specification ); ?>" placeholder="Enter your desired duration">
-
-        <?php 
-        endif;
+    public function tnc_days_field_callback() {
+        $tnc_days = get_option( 'tnc_duration' );
+        ?>
+            <input
+                type="number"
+                name="tnc_duration"
+                value="<?php echo esc_attr( $tnc_days ); ?>"
+                placeholder="Enter a cookie duration"
+            />
+        <?php
     }
 
-    public function tnc_settings_page_callback() {
-
-        global $wpdb;
-
-        $tnc_pages = $wpdb->get_results( "SELECT ID, post_name FROM {$wpdb->prefix}posts WHERE post_type = 'page' AND post_status = 'publish'", 'ARRAY_A' );
-        $page_specification = get_option( 'tnc_page_selection' );
-
+    public function tnc_pages_callback() {
+        $tnc_selected = get_option( 'tnc_page' );
         ?>
-        <select name="tnc_page_selection" id="tnc_page_selection">
-            <option value="" disabled selected><?php esc_html_e( 'Select Terms and Conditions page', 'tnc' ); ?></option>
+        <select name="tnc_page" id="tnc_page">
+            <option value="" disabled selected><?php esc_html_e( 'Select an agreement page', 'tnc' ); ?></option>
             <?php
-                foreach ( $tnc_pages as $tnc_page ) {
+                foreach ( get_pages() as $tnc_page ) {
                 ?>
-                    <option value="<?php esc_attr_e( $tnc_page['ID'], 'tnc'); ?>" <?php selected( $page_specification, $tnc_page['ID'] ); ?>><?php  esc_html_e( get_the_title( $tnc_page['ID'] ) ); ?></option>
+                    <option value="<?php esc_attr_e( $tnc_page->ID, 'tnc'); ?>" <?php selected( $tnc_selected, $tnc_page->ID ); ?>>
+                        <?php  esc_html_e( $tnc_page->post_title ); ?>
+                    </option>
                 <?php
                 }
             ?>
         </select>
-
         <?php
     }
 
