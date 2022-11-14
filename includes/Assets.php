@@ -3,7 +3,7 @@ namespace Tnc;
 
 class Assets {
     public function __construct() {
-        add_action( 'wp_enqueue_scripts', [ $this, 'asset_style' ] );
+        add_action( 'wp_enqueue_scripts', [ $this, 'tnc_assets' ] );
 
     }
 
@@ -12,8 +12,13 @@ class Assets {
      *
      * @return void
      */
-    public function asset_style() {
-        wp_enqueue_style( 'redirect-style', plugin_dir_url(__DIR__) . 'assets/css/redirect.css' );
+    public function tnc_assets() {
+        wp_enqueue_style( 'tnc-style', plugin_dir_url( __DIR__ ) . 'assets/css/style.css' );
+        wp_enqueue_script( 'tnc-script', plugin_dir_url( __DIR__ ) . 'assets/js/scripts.js', [ 'jquery' ], '0.1', true );
+
+        wp_localize_script( 'tnc-script', 'tnc_redirect_admin', [
+            'tnc_redirect'  => admin_url()
+        ]);
     }
 
 }
