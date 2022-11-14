@@ -40,7 +40,7 @@ final class TNC {
     public function init_plugin() {
         new \Tnc\Assets();
         new \Tnc\Admin\Settings();
-        new \Tnc\Admin\Button();
+        new \Tnc\Admin\Button( new \Tnc\Admin\Cookie() );
         new \Tnc\Admin\Redirect();
     }
 
@@ -72,4 +72,9 @@ final class TNC {
 
 }
 
-TNC::init();
+// init the plugin
+function tnc_init() {
+    return TNC::init();
+}
+
+tnc_init();
