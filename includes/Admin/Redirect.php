@@ -14,13 +14,14 @@ class Redirect
      * @return string
      */
     public function redirect_enforcing_agreement() {
-        if ( ! is_page( get_option( 'tnc_page' ) )
-            && empty( $_COOKIE['tnc__agreement'] )
-            && is_user_logged_in() ) {
-            wp_redirect( get_the_permalink( get_option( 'tnc_page' ) ) );
-            exit();
+        if( ! empty( get_option( 'tnc_page' ) ) ) {
+            if ( ! is_page( get_option( 'tnc_page' ) )
+                && empty( $_COOKIE['tnc__agreement'] )
+                && is_user_logged_in() ) {
+                wp_redirect( get_the_permalink( get_option( 'tnc_page' ) ) );
+                exit();
+            }
         }
-
     }
 
 }
