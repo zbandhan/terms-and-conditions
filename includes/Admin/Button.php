@@ -2,7 +2,16 @@
 namespace Tnc\Admin;
 
 class Button {
-    public function __construct() {
+    /**
+     * Composing cookie into button class
+     *
+     * @var Cookie
+     */
+    private $cookie;
+
+    public function __construct( Cookie $cookie ) {
+        $this->cookie = $cookie;
+
         add_filter( 'the_content', [ $this, 'button_in_page' ] );
     }
 
@@ -12,8 +21,11 @@ class Button {
      * @return $button
      */
     private function button() {
+        // Set cookie in agreement submission
+        $this->cookie->set_cookie();
+
         ob_start(); ?>
-            <form action="<?php echo plugin_dir_url( dirname(__DIR__) ) . 'includes/cookie.php'; ?>" method="get">
+            <form action="" method="get">
                 <input type="hidden" name="cookie" id="cookie" value="<?php echo md5( get_option( 'tnc_page' ) ); ?>" />
                 <button type="submit" class="redirect-btn">Agree</button>
             </form>
